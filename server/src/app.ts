@@ -1,14 +1,10 @@
 import express from 'express';
-import { main } from './routers';
+import router from './routers';
 const app = express();
 const port = 3000;
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+app.use("/", router);
 
 app.listen(port, () => {
     return console.log(`Express is listening at http://localhost:${port}`);
 });
-
-main();

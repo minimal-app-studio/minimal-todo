@@ -1,23 +1,13 @@
-import { PrismaClient } from '@prisma/client'
+import { Router } from 'express';
+import { HttpUtils } from '../utils/http';
+import UserRouter from './user';
+const router = Router();
 
-const prisma = new PrismaClient()
+// healthcheck endpoints
+router.get('/healthcheck', (req, res) => {
+    HttpUtils.sendResponse(res, 'server is up and running');
+});
 
-async function main() {
-  const user = await prisma.user.create({
-    data: {
-        username: "harish",
-        email: "harish@gmail.com",
-        password: "password@123"
-    }
-  })
+router.use('/user', UserRouter);
 
-  console.log(user);
-
-  const users = await prisma.user.findMany();
-
-  console.table(users);
-}
-
-export {
-    main
-}
+export default router;
