@@ -1,10 +1,11 @@
-import express from 'express';
+import initApp from './express';
 import router from './routers';
-const app = express();
+import { PrismaClient } from '@prisma/client';
+const database = new PrismaClient();
+
 const port = 3000;
-
-app.use("/", router);
-
-app.listen(port, () => {
-    return console.log(`Express is listening at http://localhost:${port}`);
+Promise.resolve(initApp(database)).then((app) => {
+    app.listen(port, () => {
+        return console.log(`Express is listening at http://localhost:${port}`);
+    });
 });

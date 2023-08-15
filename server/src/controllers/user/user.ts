@@ -1,10 +1,13 @@
 import Joi from 'joi';
-import { User } from '../types/user';
+import { User } from '../../types/user';
+import UserService from '../../services/user';
+import { HttpUtils } from '../../utils/http';
+import { ValidationError } from '../../utils/error';
 
 const UserSchema = Joi.object({
     username: Joi.string()
         .max(16)
-        .regex(/^[a-z0-9]+$/, 'username should be a-z and 0-9')
+        .regex(/^[a-z0-9]+$/)
         .messages({
             'string.max': 'Username cannot exceed {{#limit}} characters',
             'string.pattern.base': 'Username should be composed of lowercase letters and digits only',
@@ -14,7 +17,7 @@ const UserSchema = Joi.object({
     }),
     active: Joi.boolean().default(false),
     password: Joi.string()
-        .min(8)
+        .min(6)
         .max(16)
         .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
         .messages({
@@ -25,18 +28,21 @@ const UserSchema = Joi.object({
 });
 
 export default class UserController {
-    userService: any;
+    userService: UserService;
 
     constructor(userService: any) {
         this.userService = userService;
     }
 
-    addUser = async (user: User) => {
-        // validate the payload
-        const { error } = UserSchema.validate(user);
-        if (error) throw new Error(error.details[0].message);
-
-        // process further with the service
-        return await this.userService.addUser(user);
+    addUser = async (req, res, next) => {
+        try {
+            const user = req.body || {};
+            // validate the payload
+            const { error } = UserSchema.validate(user);
+            if (error) throw new ValidationError(error.details[0].message);
+            return HttpUtils.sendResponse(res, await this.userService.addUser(user));
+        } catch (err) {
+            next(err);
+        }
     };
 }
