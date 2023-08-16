@@ -3,6 +3,10 @@ import { User } from '../../types/user';
 import UserService from '../../services/user';
 import { HttpUtils } from '../../utils/http';
 import { ValidationError } from '../../utils/error';
+import peepal from 'peepal';
+const logger = peepal.child({
+    fileName: 'controller/user',
+});
 
 const UserSchema = Joi.object({
     username: Joi.string()
@@ -35,13 +39,16 @@ export default class UserController {
     }
 
     addUser = async (req, res, next) => {
+        logger.debug('invoking add user');
         try {
             const user = req.body || {};
+            logger.trace({ user });
             // validate the payload
             const { error } = UserSchema.validate(user);
             if (error) throw new ValidationError(error.details[0].message);
             return HttpUtils.sendResponse(res, await this.userService.addUser(user));
         } catch (err) {
+            logger.error(err);
             next(err);
         }
     };

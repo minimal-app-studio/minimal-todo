@@ -1,9 +1,8 @@
-import { describe, it, expect, vi, test } from 'vitest';
-import prismaMock from '../../../libs/__mocks__/prisma';
-import { User } from '../../types/user';
+import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import initApp from '../../express';
-
+import prismaMock from '../../../libs/__mocks__/prisma';
+import { User } from '../../types/user';
 const supertest = request(initApp(prismaMock));
 
 describe('user auth API', () => {

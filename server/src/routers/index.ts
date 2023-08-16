@@ -6,9 +6,15 @@ import UserService from '../services/user';
 import UserController from '../controllers/user/user';
 const router = Router();
 
+import peepal  from 'peepal';
+const logger = peepal.child({
+    fileName: "router/index.js"
+});
+
 function createRouter(database: PrismaClient) {
     // healthcheck endpoints
     router.get('/healthcheck', (req, res) => {
+        logger.debug("invoking /healthcheck");
         HttpUtils.sendResponse(res, 'server is up and running');
     });
 
