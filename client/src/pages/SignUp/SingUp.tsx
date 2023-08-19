@@ -2,7 +2,7 @@ import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Input } from '../../components/Input';
-import LinkButton from '../../components/Button';
+import { Button, LinkButton } from '../../components/Button';
 
 const UserSchema = Yup.object().shape({
     username: Yup.string()
@@ -37,33 +37,36 @@ const SignUp: React.FC = () => {
 
     return (
         <div>
-            <form onSubmit={formik.handleSubmit}>
-                <Input
-                    label="Username"
-                    type="text"
-                    name="username"
-                    value={formik.values.username}
-                    onChange={formik.handleChange}
-                    error={formik.errors.username}
-                />
-                <Input
-                    label="Email"
-                    type="text"
-                    name="email"
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    error={formik.errors.email}
-                />
-                <Input
-                    label="Password"
-                    type="text"
-                    name="password"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    error={formik.errors.password}
-                />
-                <button type="submit">Login</button>
-            </form>
+            <Input
+                label="Username"
+                type="text"
+                name="username"
+                placeholder="john doe"
+                value={formik.values.username}
+                onChange={formik.handleChange}
+                error={formik.errors.username}
+            />
+            <Input
+                label="Email"
+                type="text"
+                name="email"
+                placeholder="john@mail.com"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                error={formik.errors.email}
+            />
+            <Input
+                label="Password"
+                type="text"
+                name="password"
+                placeholder="********"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={formik.errors.password}
+            />
+            <Button variant="dark" onClick={formik.handleSubmit}>
+                Sign Up
+            </Button>
             <div>
                 Already a user? <LinkButton link="/signin">sign in</LinkButton> here.
             </div>

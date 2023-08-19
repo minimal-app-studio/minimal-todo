@@ -3,7 +3,9 @@ import { AuthenticatedUser } from '../../types/User';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Input } from '../../components/Input';
-import LinkButton from '../../components/Button';
+import { Button, LinkButton } from '../../components/Button';
+import { Container } from '../../components/Container';
+import { useNavigate } from 'react-router';
 
 type SetUserFunction = React.Dispatch<React.SetStateAction<AuthenticatedUser | null>>;
 
@@ -22,6 +24,7 @@ const UserSchema = Yup.object().shape({
 });
 
 const Signin: React.FC<{ setAuthenticatedUser: SetUserFunction }> = ({ setAuthenticatedUser }) => {
+    const navigate = useNavigate();
     const formik = useFormik({
         initialValues: {
             username: '',
@@ -29,38 +32,44 @@ const Signin: React.FC<{ setAuthenticatedUser: SetUserFunction }> = ({ setAuthen
         },
         validationSchema: UserSchema,
         onSubmit: (values) => {
+            console.log(values);
             setAuthenticatedUser({
                 username: values.username,
                 email: values.username,
             });
+            navigate('/');
         },
     });
 
     return (
-        <div>
-            <form onSubmit={formik.handleSubmit}>
-                <Input
-                    label="Email / Username"
-                    type="text"
-                    name="username"
-                    value={formik.values.username}
-                    onChange={formik.handleChange}
-                    error={formik.errors.username}
-                />
-                <Input
-                    label="Password"
-                    type="text"
-                    name="password"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    error={formik.errors.password}
-                />
-                <button type="submit">Login</button>
-            </form>
-            <div>
-                First time here? <LinkButton link="/signup">sign up</LinkButton> and become a part of our growing family.
+        <Container width="60vw" height="100vh" center>
+            <Input
+                label="Email / Username"
+                type="text"
+                name="username"
+                placeholder="john@mail.com"
+                value={formik.values.username}
+                onChange={formik.handleChange}
+                error={formik.errors.username}
+            />
+            <Input
+                label="Password"
+                type="text"
+                name="password"
+                placeholder="*******"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={formik.errors.password}
+            />
+            <div className="grid place-items-center p-1 my-2 w-full">
+                <Button variant="dark" onClick={formik.handleSubmit}>
+                    Sign In
+                </Button>
+                <div>
+                    First time here? <LinkButton link="/signup">sign up</LinkButton> and become a part of our growing family.
+                </div>
             </div>
-        </div>
+        </Container>
     );
 };
 

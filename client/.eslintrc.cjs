@@ -26,9 +26,11 @@ module.exports = {
                 vars: 'all',
                 args: 'after-used',
                 ignoreRestSiblings: true,
+                varsIgnorePattern: '^_',
                 argsIgnorePattern: '^_',
             },
         ],
         'react/react-in-jsx-scope': 'off',
+        'react/prop-types': 'off', // Disable prop-types validation for TypeScript files
     },
 };
