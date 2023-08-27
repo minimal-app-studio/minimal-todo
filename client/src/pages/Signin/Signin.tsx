@@ -11,10 +11,13 @@ type SetUserFunction = React.Dispatch<React.SetStateAction<AuthenticatedUser | n
 
 const UserSchema = Yup.object().shape({
     username: Yup.string()
+        .required('Username is a required field')
+        .min(3, 'Username must be at least ${min} characters long')
         .max(16, 'Username cannot exceed ${max} characters')
         .matches(/^[a-z0-9]+$/, 'Username should be composed of lowercase letters and digits only'),
     active: Yup.boolean().default(false),
     password: Yup.string()
+        .required('Password is a required field')
         .min(6, 'Password must be at least ${min} characters long')
         .max(16, 'Password cannot be longer than ${max} characters')
         .matches(

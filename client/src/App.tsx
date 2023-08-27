@@ -10,12 +10,14 @@ const Home = () => {
     return <h1> Home </h1>;
 };
 
-const ProtectedRoute: React.FC<{ element: React.ReactNode }> = ({ element }) => {
+type ProtectedRouteProps = { component: React.ReactNode };
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ component }) => {
     const authenticatedUser = useContext(AuthenticatedUserContext);
     if (!authenticatedUser) {
         return <Navigate to="/signin" />;
     }
-    return element;
+    return component;
 };
 
 function App() {
@@ -26,7 +28,7 @@ function App() {
             <Routes>
                 <Route path="/signin" element={<Signin setAuthenticatedUser={setAuthenticatedUser} />} />
                 <Route path="/signup" element={<SignUp />} />
-                <Route path="/" element={<ProtectedRoute element={<Home />}></ProtectedRoute>} />
+                <Route path="/" element={<ProtectedRoute component={<Home />}></ProtectedRoute>} />
             </Routes>
         </AuthenticatedUserContext.Provider>
     );
