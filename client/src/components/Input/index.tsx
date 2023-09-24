@@ -6,7 +6,7 @@ type ErrorTextProps = {
 };
 
 export const ErrorText: React.FC<ErrorTextProps> = ({ text, focused }) => {
-    return <p className={`text-slate-600 ${!focused ? 'block' : 'hidden'}`}>{text}</p>;
+    return <p className={`text-red-500 ${!focused ? 'block' : 'hidden'}`}>{text}</p>;
 };
 
 type InputProps = {

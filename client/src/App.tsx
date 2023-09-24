@@ -5,28 +5,36 @@ import Signin from './pages/Signin/Signin';
 import { AuthenticatedUser } from './types/User';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import SignUp from './pages/SignUp/SingUp';
+import TodoItem from './components/TodoItem';
 
 const Home = () => {
-    return <h1> Home </h1>;
+    return (
+        <div>
+            <h1> Home </h1>
+            <TodoItem text="my task" />
+        </div>
+    );
 };
 
-const ProtectedRoute: React.FC<{ element: React.ReactNode }> = ({ element }) => {
+type ProtectedRouteProps = { component: React.ReactNode };
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ component }) => {
     const authenticatedUser = useContext(AuthenticatedUserContext);
     if (!authenticatedUser) {
         return <Navigate to="/signin" />;
     }
-    return element;
+    return component;
 };
 
 function App() {
-    const [authenticatedUser, setAuthenticatedUser] = useState<AuthenticatedUser | null>(null);
+    const [authenticatedUser, setAuthenticatedUser] = useState<AuthenticatedUser | null>({ username: 'username', email: 'Tamil123@email.com' });
 
     return (
         <AuthenticatedUserContext.Provider value={authenticatedUser}>
             <Routes>
                 <Route path="/signin" element={<Signin setAuthenticatedUser={setAuthenticatedUser} />} />
                 <Route path="/signup" element={<SignUp />} />
-                <Route path="/" element={<ProtectedRoute element={<Home />}></ProtectedRoute>} />
+                <Route path="/" element={<ProtectedRoute component={<Home />}></ProtectedRoute>} />
             </Routes>
         </AuthenticatedUserContext.Provider>
     );
